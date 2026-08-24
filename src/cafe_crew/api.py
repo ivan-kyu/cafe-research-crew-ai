@@ -56,7 +56,7 @@ def require_access_key(provided_key: str | None) -> None:
 
 def run_research_flow(area: str):
     # CrewAI is intentionally imported on first research request so health checks
-    # and the landing page stay fast on small container hosts.
+    # and the landing page stay fast on small hosted runtimes.
     from cafe_crew.flow import CafeResearchFlow
 
     return CafeResearchFlow().kickoff(inputs={"area": area})

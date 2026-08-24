@@ -63,16 +63,43 @@ The agents and their tasks live together in `src/cafe_crew/crew.py`. That is the
 
 4. Open [http://localhost:8000](http://localhost:8000).
 
-## Put it online for your iPhone
+## Deploy to Vercel
 
-The included `Dockerfile` works on common container hosts. `render.yaml` also provides a Render Blueprint:
+The project is configured for Vercel's native FastAPI runtime. `app.py` is the deployment entrypoint and `vercel.json` allows a research request to run for up to the Hobby-plan maximum of five minutes. The function runs in Singapore (`sin1`), which is a sensible default for use from Bali and can be changed in `vercel.json`.
+
+### From the Vercel dashboard
 
 1. Push this folder to a GitHub repository.
-2. In Render, create a Blueprint from that repository.
-3. Add `OPENAI_API_KEY`, `GOOGLE_PLACES_API_KEY`, and a private `APP_ACCESS_KEY` when prompted.
-4. Open the resulting HTTPS URL in Safari and use **Add to Home Screen** if you want an app-like icon.
+2. In Vercel, choose **Add New → Project** and import that repository.
+3. Keep the detected FastAPI settings and add these environment variables for Production, Preview, and Development as appropriate:
+   - `OPENAI_API_KEY`
+   - `GOOGLE_PLACES_API_KEY`
+   - `APP_ACCESS_KEY` (strongly recommended)
+   - `LLM_MODEL=openai/gpt-4.1-mini`
+   - `CREWAI_TRACING_ENABLED=false`
+4. Deploy, then open the generated HTTPS URL. On iPhone, use **Add to Home Screen** for an app-like icon.
 
-For any other container host, deploy the Dockerfile and add the same secrets. The access key is optional locally but strongly recommended online because every research request uses paid APIs. Enter it under **Private access key** in the web form. The server reads its port from `PORT` and exposes `/health` for health checks.
+### From the CLI
+
+After installing and signing in to the Vercel CLI, run:
+
+```bash
+vercel
+vercel env add OPENAI_API_KEY
+vercel env add GOOGLE_PLACES_API_KEY
+vercel env add APP_ACCESS_KEY
+vercel env add LLM_MODEL
+vercel env add CREWAI_TRACING_ENABLED
+vercel --prod
+```
+
+The access key is optional locally but strongly recommended online because every research request uses paid APIs. Enter it under **Private access key** in the web form.
+
+### Can it run for free?
+
+Vercel's Hobby plan can host this personal project for free within its included usage and five-minute function limit. The application is stateless, so it fits Vercel's serverless model. The external services are separate: OpenAI model calls and the Google Places fields used here can incur charges, and Google requires billing to be enabled. Free Vercel hosting therefore does not make each research report free.
+
+CrewAI is a relatively large dependency and cold starts will be slower than the `/health` endpoint. Vercel's standard Python function limit is 500 MB; new projects are eligible for Large Functions (currently beta), which allow larger bundles. If a build reports that the standard limit was exceeded, add `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` in Vercel and redeploy. If a full research run regularly exceeds five minutes, a long-running job host is a better fit.
 
 ## API
 

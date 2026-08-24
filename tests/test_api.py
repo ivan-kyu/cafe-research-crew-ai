@@ -6,6 +6,12 @@ from cafe_crew.api import app
 client = TestClient(app)
 
 
+def test_vercel_entrypoint_exports_the_application() -> None:
+    from app import app as vercel_app
+
+    assert vercel_app is app
+
+
 def test_health() -> None:
     response = client.get("/health")
 

@@ -112,8 +112,15 @@ curl -X POST http://localhost:8000/api/research \
 
 The API returns structured JSON, so a native iPhone app or another frontend can be added later without changing the crew.
 
+Each place can include up to ten Google Place photos. The web app loads the first three only when
+their card approaches the viewport, then offers three more at a time. Photo bytes pass through the
+backend so `GOOGLE_PLACES_API_KEY` is never exposed to the browser. Google does not return photo
+category labels such as “food” or “atmosphere”; the gallery therefore preserves Google's relevance
+order and displays required photographer attribution.
+
 ## Cost and data notes
 
 - Each report makes two Google Text Search requests and three LLM calls when qualifying places exist.
+  Each photo the user reveals makes a separate Google Place Photo request.
 - Requesting ratings and reviews uses paid Google Places data fields. Set billing alerts in Google Cloud.
 - Review summaries are an AI interpretation of a small, relevance-ranked sample. Always use the Google Maps link for the latest details before travelling.

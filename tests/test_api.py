@@ -34,3 +34,34 @@ def test_optional_access_key_blocks_unknown_clients(monkeypatch) -> None:
 
     assert response.status_code == 401
     assert response.json()["detail"] == "A valid private access key is required."
+
+
+def test_photo_proxy_rejects_invalid_resource_name(monkeypatch) -> None:
+    monkeypatch.setenv("GOOGLE_PLACES_API_KEY", "google-test-key")
+
+    response = client.get("/api/place-photo", params={"name": "https://example.com/image.jpg"})
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Invalid Google Place photo name."
+
+
+def test_photo_proxy_returns_google_image(monkeypatch) -> None:
+    from cafe_crew import api
+
+    monkeypatch.setenv("GOOGLE_PLACES_API_KEY", "google-test-key")
+
+    async def fake_fetch(name: str, api_key: str) -> tuple[bytes, str]:
+        assert name == "places/abc/photos/photo-1"
+        assert api_key == "google-test-key"
+        return b"image bytes", "image/webp"
+
+    monkeypatch.setattr(api, "fetch_google_photo", fake_fetch)
+    response = client.get(
+        "/api/place-photo",
+        params={"name": "places/abc/photos/photo-1"},
+    )
+
+    assert response.status_code == 200
+    assert response.content == b"image bytes"
+    assert response.headers["content-type"] == "image/webp"
+    assert response.headers["cache-control"] == "private, no-store"

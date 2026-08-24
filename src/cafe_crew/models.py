@@ -14,6 +14,19 @@ class ReviewSnippet(BaseModel):
     text: str = ""
 
 
+class PhotoAttribution(BaseModel):
+    display_name: str = ""
+    uri: str = ""
+
+
+class PlacePhoto(BaseModel):
+    name: str
+    width_px: int = 0
+    height_px: int = 0
+    author_attributions: list[PhotoAttribution] = Field(default_factory=list)
+    google_maps_url: str = ""
+
+
 class SourcePlace(BaseModel):
     place_id: str
     name: str
@@ -25,6 +38,7 @@ class SourcePlace(BaseModel):
     google_maps_url: str
     website_url: str = ""
     reviews: list[ReviewSnippet] = Field(default_factory=list)
+    photos: list[PlacePhoto] = Field(default_factory=list)
 
 
 class DiscoveryResult(BaseModel):
@@ -84,6 +98,7 @@ class PlaceBrief(BaseModel):
     review_summary: str
     watch_out: str
     best_for: str
+    photos: list[PlacePhoto] = Field(default_factory=list)
 
 
 class ResearchReport(BaseModel):

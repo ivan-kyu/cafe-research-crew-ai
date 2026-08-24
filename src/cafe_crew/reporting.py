@@ -20,5 +20,5 @@ def merge_place(source: SourcePlace, insight: AgentPlaceBrief | None) -> PlaceBr
         review_summary=insight.review_summary if insight else "No review summary was produced.",
         watch_out=insight.watch_out if insight else "",
         best_for=insight.best_for if insight else "Well-rated option",
+        photos=source.photos,
     )
-

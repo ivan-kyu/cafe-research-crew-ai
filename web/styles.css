@@ -194,6 +194,54 @@ h3 { margin: 0; font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
 .standout { margin: 0 0 10px; font-weight: 650; }
 .signal { margin: 0; color: #4e514a; font-size: 0.9rem; }
 .watch-out { margin: 9px 0 0; color: #76523f; font-size: 0.85rem; }
+.photo-section { margin-top: 18px; }
+.photo-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.photo-heading h4 { margin: 0; font-size: 0.8rem; letter-spacing: 0.02em; }
+.photo-heading span { color: var(--muted); font-size: 0.68rem; }
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+.photo-tile { min-width: 0; margin: 0; }
+.photo-media {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  background: #e8e0d4;
+}
+.photo-tile.is-loading .photo-media::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.5) 45%, transparent 70%);
+  content: "";
+}
+.photo-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 180ms ease; }
+.photo-media:hover img { transform: scale(1.025); }
+.photo-tile.is-error .photo-media::after {
+  display: grid;
+  position: absolute;
+  inset: 0;
+  place-items: center;
+  color: var(--muted);
+  content: "Photo unavailable";
+  font-size: 0.68rem;
+}
+.photo-tile figcaption { min-height: 1.2em; margin: 4px 2px 0; color: var(--muted); font-size: 0.61rem; }
+.photo-tile figcaption a { color: inherit; }
+.photo-more {
+  min-height: 36px;
+  margin-top: 9px;
+  padding: 0 12px;
+  border: 1px solid #cfc5b6;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.72rem;
+}
+.photo-more:hover { background: #f3ece1; }
 .actions { display: flex; gap: 16px; margin-top: 16px; }
 .actions a { color: var(--accent); font-size: 0.82rem; font-weight: 800; text-decoration: none; }
 .review-note { margin-top: 20px; line-height: 1.45; }
@@ -205,9 +253,13 @@ h3 { margin: 0; font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
   .report-head { display: block; }
   .style-pill { margin-top: 12px; }
   .place-card { padding: 17px; }
+  .photo-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .photo-more { width: auto; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .place-card { animation: rise 260ms ease both; }
+  .photo-tile.is-loading .photo-media::after { animation: shimmer 1.25s infinite linear; }
   @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+  @keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
 }

@@ -2,7 +2,13 @@ from datetime import datetime, timezone
 
 import httpx
 
-from cafe_crew.models import DiscoveryResult, ReviewSnippet, SourcePlace
+from cafe_crew.models import (
+    DiscoveryResult,
+    PhotoAttribution,
+    PlacePhoto,
+    ReviewSnippet,
+    SourcePlace,
+)
 
 
 PLACES_URL = "https://places.googleapis.com/v1/places:searchText"
@@ -19,6 +25,7 @@ FIELD_MASK = ",".join(
         "places.websiteUri",
         "places.businessStatus",
         "places.reviews",
+        "places.photos",
     ]
 )
 
@@ -122,6 +129,23 @@ class GooglePlacesClient:
             ),
             website_url=place.get("websiteUri", ""),
             reviews=reviews[:3],
+            photos=[cls._to_photo(photo) for photo in place.get("photos", [])],
+        )
+
+    @staticmethod
+    def _to_photo(photo: dict) -> PlacePhoto:
+        return PlacePhoto(
+            name=photo["name"],
+            width_px=int(photo.get("widthPx", 0)),
+            height_px=int(photo.get("heightPx", 0)),
+            author_attributions=[
+                PhotoAttribution(
+                    display_name=author.get("displayName", ""),
+                    uri=author.get("uri", ""),
+                )
+                for author in photo.get("authorAttributions", [])
+            ],
+            google_maps_url=photo.get("googleMapsUri", ""),
         )
 
     @staticmethod

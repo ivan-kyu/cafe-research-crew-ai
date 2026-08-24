@@ -12,6 +12,17 @@ def place(place_id: str, rating: float, review_count: int, status: str = "OPERAT
         "userRatingCount": review_count,
         "businessStatus": status,
         "googleMapsUri": f"https://maps.google.com/?place={place_id}",
+        "photos": [
+            {
+                "name": f"places/{place_id}/photos/photo-1",
+                "widthPx": 1600,
+                "heightPx": 1200,
+                "authorAttributions": [
+                    {"displayName": "Test Photographer", "uri": "https://maps.example/author"}
+                ],
+                "googleMapsUri": "https://maps.example/photo",
+            }
+        ],
         "reviews": [
             {
                 "rating": 5,
@@ -49,6 +60,8 @@ def test_discover_filters_deduplicates_and_sorts() -> None:
     assert result.qualified_count == 2
     assert [item.place_id for item in result.places] == ["best", "duplicate"]
     assert result.places[0].reviews[0].text == "Excellent coffee and kind staff."
+    assert result.places[0].photos[0].name == "places/best/photos/photo-1"
+    assert result.places[0].photos[0].author_attributions[0].display_name == "Test Photographer"
 
 
 def test_google_error_is_readable() -> None:

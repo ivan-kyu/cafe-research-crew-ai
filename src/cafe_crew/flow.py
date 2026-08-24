@@ -53,10 +53,16 @@ class CafeResearchFlow(Flow[CafeResearchState]):
 
         settings = Settings.from_env()
         crew = build_research_crew(settings.llm_model)
+        # Photo resource names are long and have no semantic category metadata,
+        # so keep them out of the LLM context and attach them during report assembly.
+        places_json = discovery.model_dump_json(
+            indent=2,
+            exclude={"places": {"__all__": {"photos"}}},
+        )
         result = crew.kickoff(
             inputs={
                 "area": self.state.area,
-                "places_json": discovery.model_dump_json(indent=2),
+                "places_json": places_json,
             }
         )
 

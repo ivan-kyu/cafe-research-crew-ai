@@ -1,0 +1,10 @@
+.env
+.venv/
+.venv.nosync/
+.venv.dataless-backup/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.firecrawl/
+.DS_Store

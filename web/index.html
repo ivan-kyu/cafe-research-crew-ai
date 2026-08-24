@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5efe5" />
+    <title>Cafe Scout</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <p class="eyebrow">Cafe research crew</p>
+        <h1>Find the places worth the stop.</h1>
+        <p class="intro">
+          Enter an area name. Three agents will scout the map, read review signals, and return a tiny shortlist.
+        </p>
+      </header>
+
+      <form id="research-form" class="search-card">
+        <label for="area">Area, neighbourhood, or town</label>
+        <div class="search-row">
+          <input
+            id="area"
+            name="area"
+            type="search"
+            placeholder="e.g. Ubud, Bali"
+            autocomplete="address-level2"
+            minlength="2"
+            maxlength="120"
+            required
+          />
+          <button type="submit">Scout</button>
+        </div>
+        <p class="threshold">Only 4.5+ places with at least 30 ratings</p>
+        <details class="access-settings">
+          <summary>Private access key</summary>
+          <label for="access-key">Only needed when configured on the server</label>
+          <input id="access-key" type="password" autocomplete="current-password" />
+        </details>
+      </form>
+
+      <section id="status" class="status" hidden aria-live="polite"></section>
+      <section id="report" hidden aria-live="polite">
+        <div class="report-head">
+          <div>
+            <p id="report-kicker" class="eyebrow"></p>
+            <h2 id="report-title"></h2>
+          </div>
+          <span id="area-style" class="style-pill"></span>
+        </div>
+        <p id="area-summary" class="area-summary"></p>
+        <p id="report-counts" class="counts"></p>
+        <p class="maps-attribution">
+          Place data from <span class="gmp-attribution" translate="no">Google Maps</span>
+        </p>
+        <div id="places" class="places"></div>
+        <p id="review-note" class="review-note"></p>
+      </section>
+    </main>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

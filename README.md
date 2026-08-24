@@ -65,7 +65,7 @@ The agents and their tasks live together in `src/cafe_crew/crew.py`. That is the
 
 ## Deploy to Vercel
 
-The project is configured for Vercel's native FastAPI runtime. `app.py` is the deployment entrypoint and `vercel.json` allows a research request to run for up to the Hobby-plan maximum of five minutes. The function runs in Singapore (`sin1`), which is a sensible default for use from Bali and can be changed in `vercel.json`.
+The project is configured for Vercel's native FastAPI runtime. `app.py` is the deployment entrypoint, and the Hobby plan's default function limit allows a research request to run for up to five minutes. `vercel.json` places the function in Singapore (`sin1`), which is a sensible default for use from Bali and can be changed there.
 
 ### From the Vercel dashboard
 
